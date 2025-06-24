@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.product.mapper.ProductInfoMapper">
+    
+    <resultMap type="ProductInfo" id="ProductInfoResult">
+        <result property="id"    column="id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productNumber"    column="product_number"    />
+        <result property="productCost"    column="product_cost"    />
+        <result property="productSell"    column="product_sell"    />
+        <result property="productProfile"    column="product_profile"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="updatetime"    column="updatetime"    />
+        <result property="extendfield"    column="extendfield"    />
+    </resultMap>
+
+    <sql id="selectProductInfoVo">
+        select id, product_name, product_number, product_cost, product_sell, product_profile, createtime, updatetime, extendfield from product_info
+    </sql>
+
+    <select id="selectProductInfoList" parameterType="ProductInfo" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        <where>  
+            <if test="productName != null  and productName != ''"> and product_name like concat('%', #{productName}, '%')</if>
+            <if test="productNumber != null "> and product_number = #{productNumber}</if>
+            <if test="productCost != null "> and product_cost = #{productCost}</if>
+            <if test="productSell != null "> and product_sell = #{productSell}</if>
+            <if test="productProfile != null "> and product_profile = #{productProfile}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="updatetime != null "> and updatetime = #{updatetime}</if>
+            <if test="extendfield != null  and extendfield != ''"> and extendfield like concat('%', #{extendfield}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectProductInfoById" parameterType="Long" resultMap="ProductInfoResult">
+        <include refid="selectProductInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertProductInfo" parameterType="ProductInfo">
+        insert into product_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">id,</if>
+            <if test="productName != null">product_name,</if>
+            <if test="productNumber != null">product_number,</if>
+            <if test="productCost != null">product_cost,</if>
+            <if test="productSell != null">product_sell,</if>
+            <if test="productProfile != null">product_profile,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="updatetime != null">updatetime,</if>
+            <if test="extendfield != null">extendfield,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">#{id},</if>
+            <if test="productName != null">#{productName},</if>
+            <if test="productNumber != null">#{productNumber},</if>
+            <if test="productCost != null">#{productCost},</if>
+            <if test="productSell != null">#{productSell},</if>
+            <if test="productProfile != null">#{productProfile},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="updatetime != null">#{updatetime},</if>
+            <if test="extendfield != null">#{extendfield},</if>
+         </trim>
+    </insert>
+
+    <update id="updateProductInfo" parameterType="ProductInfo">
+        update product_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="productName != null">product_name = #{productName},</if>
+            <if test="productNumber != null">product_number = #{productNumber},</if>
+            <if test="productCost != null">product_cost = #{productCost},</if>
+            <if test="productSell != null">product_sell = #{productSell},</if>
+            <if test="productProfile != null">product_profile = #{productProfile},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="updatetime != null">updatetime = #{updatetime},</if>
+            <if test="extendfield != null">extendfield = #{extendfield},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteProductInfoById" parameterType="Long">
+        delete from product_info where id = #{id}
+    </delete>
+
+    <delete id="deleteProductInfoByIds" parameterType="String">
+        delete from product_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

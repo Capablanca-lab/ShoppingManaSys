@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.profile.mapper.VemProfileMapper">
+    
+    <resultMap type="VemProfile" id="VemProfileResult">
+        <result property="vemId"    column="vem_id"    />
+        <result property="soldQuantity"    column="soldQuantity"    />
+        <result property="remainingQuantity"    column="remainingQuantity"    />
+        <result property="totalProfit"    column="totalProfit"    />
+        <result property="extendInfo"    column="extendInfo"    />
+        <result property="createdTime"    column="createdTime"    />
+        <result property="updatedTime"    column="updatedTime"    />
+    </resultMap>
+
+    <resultMap id="VemProfileProductInfoResult" type="VemProfile" extends="VemProfileResult">
+        <collection property="productInfoList" ofType="ProductInfo" column="vem_id" select="selectProductInfoList" />
+    </resultMap>
+
+    <resultMap type="ProductInfo" id="ProductInfoResult">
+        <result property="id"    column="id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="productNumber"    column="product_number"    />
+        <result property="productCost"    column="product_cost"    />
+        <result property="productSell"    column="product_sell"    />
+        <result property="productProfile"    column="product_profile"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="updatetime"    column="updatetime"    />
+        <result property="extendfield"    column="extendfield"    />
+    </resultMap>
+
+    <sql id="selectVemProfileVo">
+        select vem_id, soldQuantity, remainingQuantity, totalProfit, extendInfo, createdTime, updatedTime from vem_profile
+    </sql>
+
+    <select id="selectVemProfileList" parameterType="VemProfile" resultMap="VemProfileResult">
+        <include refid="selectVemProfileVo"/>
+        <where>  
+            <if test="vemId != null "> and vem_id = #{vemId}</if>
+            <if test="soldQuantity != null "> and soldQuantity = #{soldQuantity}</if>
+            <if test="remainingQuantity != null "> and remainingQuantity = #{remainingQuantity}</if>
+            <if test="totalProfit != null "> and totalProfit = #{totalProfit}</if>
+            <if test="createdTime != null "> and createdTime = #{createdTime}</if>
+            <if test="updatedTime != null "> and updatedTime = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectVemProfileByVemId" parameterType="Long" resultMap="VemProfileProductInfoResult">
+        select vem_id, soldQuantity, remainingQuantity, totalProfit, extendInfo, createdTime, updatedTime
+        from vem_profile
+        where vem_id = #{vemId}
+    </select>
+
+    <select id="selectProductInfoList" resultMap="ProductInfoResult">
+        select id, product_name, product_number, product_cost, product_sell, product_profile, createtime, updatetime, extendfield
+        from product_info
+        where id = #{id}
+    </select>
+
+    <insert id="insertVemProfile" parameterType="VemProfile">
+        insert into vem_profile
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vemId != null">vem_id,</if>
+            <if test="soldQuantity != null">soldQuantity,</if>
+            <if test="remainingQuantity != null">remainingQuantity,</if>
+            <if test="totalProfit != null">totalProfit,</if>
+            <if test="extendInfo != null">extendInfo,</if>
+            <if test="createdTime != null">createdTime,</if>
+            <if test="updatedTime != null">updatedTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vemId != null">#{vemId},</if>
+            <if test="soldQuantity != null">#{soldQuantity},</if>
+            <if test="remainingQuantity != null">#{remainingQuantity},</if>
+            <if test="totalProfit != null">#{totalProfit},</if>
+            <if test="extendInfo != null">#{extendInfo},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVemProfile" parameterType="VemProfile">
+        update vem_profile
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="soldQuantity != null">soldQuantity = #{soldQuantity},</if>
+            <if test="remainingQuantity != null">remainingQuantity = #{remainingQuantity},</if>
+            <if test="totalProfit != null">totalProfit = #{totalProfit},</if>
+            <if test="extendInfo != null">extendInfo = #{extendInfo},</if>
+            <if test="createdTime != null">createdTime = #{createdTime},</if>
+            <if test="updatedTime != null">updatedTime = #{updatedTime},</if>
+        </trim>
+        where vem_id = #{vemId}
+    </update>
+
+    <delete id="deleteVemProfileByVemId" parameterType="Long">
+        delete from vem_profile where vem_id = #{vemId}
+    </delete>
+
+    <delete id="deleteVemProfileByVemIds" parameterType="String">
+        delete from vem_profile where vem_id in 
+        <foreach item="vemId" collection="array" open="(" separator="," close=")">
+            #{vemId}
+        </foreach>
+    </delete>
+    
+    <delete id="deleteProductInfoByIds" parameterType="String">
+        delete from product_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+
+    <delete id="deleteProductInfoById" parameterType="Long">
+        delete from product_info where id = #{id}
+    </delete>
+
+    <insert id="batchProductInfo">
+        insert into product_info( id, product_name, product_number, product_cost, product_sell, product_profile, createtime, updatetime, extendfield) values
+        <foreach item="item" index="index" collection="list" separator=",">
+            ( #{item.id}, #{item.productName}, #{item.productNumber}, #{item.productCost}, #{item.productSell}, #{item.productProfile}, #{item.createtime}, #{item.updatetime}, #{item.extendfield})
+        </foreach>
+    </insert>
+</mapper>

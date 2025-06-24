@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.info.mapper.VemInfoMapper">
+    
+    <resultMap type="VemInfo" id="VemInfoResult">
+        <result property="id"    column="id"    />
+        <result property="location"    column="location"    />
+        <result property="status"    column="status"    />
+        <result property="version"    column="version"    />
+        <result property="suppliers"    column="suppliers"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="lastMaintenanceDate"    column="last_maintenance_date"    />
+        <result property="extendfield"    column="extendfield"    />
+        <result property="comment"    column="comment"    />
+    </resultMap>
+
+    <sql id="selectVemInfoVo">
+        select id, location, status, version, suppliers, created_time, last_maintenance_date, extendfield, comment from vem_info
+    </sql>
+
+    <select id="selectVemInfoList" parameterType="VemInfo" resultMap="VemInfoResult">
+        <include refid="selectVemInfoVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="location != null  and location != ''"> and location like concat('%', #{location}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="version != null  and version != ''"> and version = #{version}</if>
+            <if test="suppliers != null  and suppliers != ''"> and suppliers = #{suppliers}</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="lastMaintenanceDate != null "> and last_maintenance_date = #{lastMaintenanceDate}</if>
+        </where>
+    </select>
+    
+    <select id="selectVemInfoById" parameterType="Long" resultMap="VemInfoResult">
+        <include refid="selectVemInfoVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertVemInfo" parameterType="VemInfo" useGeneratedKeys="true" keyProperty="id">
+        insert into vem_info
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="location != null and location != ''">location,</if>
+            <if test="status != null and status != ''">status,</if>
+            <if test="version != null and version != ''">version,</if>
+            <if test="suppliers != null">suppliers,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="lastMaintenanceDate != null">last_maintenance_date,</if>
+            <if test="extendfield != null">extendfield,</if>
+            <if test="comment != null">comment,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="location != null and location != ''">#{location},</if>
+            <if test="status != null and status != ''">#{status},</if>
+            <if test="version != null and version != ''">#{version},</if>
+            <if test="suppliers != null">#{suppliers},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="lastMaintenanceDate != null">#{lastMaintenanceDate},</if>
+            <if test="extendfield != null">#{extendfield},</if>
+            <if test="comment != null">#{comment},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVemInfo" parameterType="VemInfo">
+        update vem_info
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="location != null and location != ''">location = #{location},</if>
+            <if test="status != null and status != ''">status = #{status},</if>
+            <if test="version != null and version != ''">version = #{version},</if>
+            <if test="suppliers != null">suppliers = #{suppliers},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="lastMaintenanceDate != null">last_maintenance_date = #{lastMaintenanceDate},</if>
+            <if test="extendfield != null">extendfield = #{extendfield},</if>
+            <if test="comment != null">comment = #{comment},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVemInfoById" parameterType="Long">
+        delete from vem_info where id = #{id}
+    </delete>
+
+    <delete id="deleteVemInfoByIds" parameterType="String">
+        delete from vem_info where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

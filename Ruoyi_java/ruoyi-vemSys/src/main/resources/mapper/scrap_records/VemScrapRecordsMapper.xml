@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.vemSys.mapper.VemScrapRecordsMapper">
+    
+    <resultMap type="VemScrapRecords" id="VemScrapRecordsResult">
+        <result property="scrapId"    column="scrap_id"    />
+        <result property="vemId"    column="vem_id"    />
+        <result property="vemVersion"    column="vem_version"    />
+        <result property="scrapReason"    column="scrap_reason"    />
+        <result property="extendField"    column="extendField"    />
+        <result property="createTime"    column="createTime"    />
+        <result property="updateTime"    column="updateTime"    />
+    </resultMap>
+
+    <sql id="selectVemScrapRecordsVo">
+        select scrap_id, vem_id, vem_version, scrap_reason, extendField, createTime, updateTime from vem_scrap_records
+    </sql>
+
+    <select id="selectVemScrapRecordsList" parameterType="VemScrapRecords" resultMap="VemScrapRecordsResult">
+        <include refid="selectVemScrapRecordsVo"/>
+        <where>  
+            <if test="vemId != null "> and vem_id = #{vemId}</if>
+            <if test="vemVersion != null  and vemVersion != ''"> and vem_version = #{vemVersion}</if>
+            <if test="scrapReason != null  and scrapReason != ''"> and scrap_reason like concat('%', #{scrapReason}, '%')</if>
+            <if test="createTime != null "> and createTime = #{createTime}</if>
+            <if test="updateTime != null "> and updateTime = #{updateTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectVemScrapRecordsByScrapId" parameterType="Long" resultMap="VemScrapRecordsResult">
+        <include refid="selectVemScrapRecordsVo"/>
+        where scrap_id = #{scrapId}
+    </select>
+
+    <insert id="insertVemScrapRecords" parameterType="VemScrapRecords">
+        insert into vem_scrap_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scrapId != null">scrap_id,</if>
+            <if test="vemId != null">vem_id,</if>
+            <if test="vemVersion != null">vem_version,</if>
+            <if test="scrapReason != null">scrap_reason,</if>
+            <if test="extendField != null">extendField,</if>
+            <if test="createTime != null">createTime,</if>
+            <if test="updateTime != null">updateTime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scrapId != null">#{scrapId},</if>
+            <if test="vemId != null">#{vemId},</if>
+            <if test="vemVersion != null">#{vemVersion},</if>
+            <if test="scrapReason != null">#{scrapReason},</if>
+            <if test="extendField != null">#{extendField},</if>
+            <if test="createTime != null">#{createTime},</if>
+            <if test="updateTime != null">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVemScrapRecords" parameterType="VemScrapRecords">
+        update vem_scrap_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vemId != null">vem_id = #{vemId},</if>
+            <if test="vemVersion != null">vem_version = #{vemVersion},</if>
+            <if test="scrapReason != null">scrap_reason = #{scrapReason},</if>
+            <if test="extendField != null">extendField = #{extendField},</if>
+            <if test="createTime != null">createTime = #{createTime},</if>
+            <if test="updateTime != null">updateTime = #{updateTime},</if>
+        </trim>
+        where scrap_id = #{scrapId}
+    </update>
+
+    <delete id="deleteVemScrapRecordsByScrapId" parameterType="Long">
+        delete from vem_scrap_records where scrap_id = #{scrapId}
+    </delete>
+
+    <delete id="deleteVemScrapRecordsByScrapIds" parameterType="String">
+        delete from vem_scrap_records where scrap_id in 
+        <foreach item="scrapId" collection="array" open="(" separator="," close=")">
+            #{scrapId}
+        </foreach>
+    </delete>
+
+    <update id="updateVemInfoRecords" parameterType="VemScrapRecords">
+        update vem_info set status = "3"
+        where id = #{vemId}
+    </update>
+</mapper>

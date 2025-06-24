@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.vemSys.mapper.VemRepairRecordsMapper">
+    
+    <resultMap type="VemRepairRecords" id="VemRepairRecordsResult">
+        <result property="recordId"    column="record_id"    />
+        <result property="vemId"    column="vem_id"    />
+        <result property="vemLocation"    column="vem_location"    />
+        <result property="Repairers"    column="Repairers"    />
+        <result property="repairIssues"    column="Repair_issues"    />
+        <result property="repairCompelete"    column="Repair_compelete"    />
+        <result property="extendField"    column="extendField"    />
+        <result property="createtime"    column="createtime"    />
+        <result property="updatetime"    column="updatetime"    />
+    </resultMap>
+
+    <sql id="selectVemRepairRecordsVo">
+        select record_id, vem_id, vem_location, Repairers, Repair_issues, Repair_compelete, extendField, createtime, updatetime from vem_repair_records
+    </sql>
+
+    <select id="selectVemRepairRecordsList" parameterType="VemRepairRecords" resultMap="VemRepairRecordsResult">
+        <include refid="selectVemRepairRecordsVo"/>
+        <where>  
+            <if test="recordId != null "> and record_id = #{recordId}</if>
+            <if test="vemId != null "> and vem_id = #{vemId}</if>
+            <if test="vemLocation != null  and vemLocation != ''"> and vem_location = #{vemLocation}</if>
+            <if test="Repairers != null  and Repairers != ''"> and Repairers = #{Repairers}</if>
+            <if test="repairIssues != null  and repairIssues != ''"> and Repair_issues = #{repairIssues}</if>
+            <if test="repairCompelete != null  and repairCompelete != ''"> and Repair_compelete = #{repairCompelete}</if>
+            <if test="extendField != null  and extendField != ''"> and extendField = #{extendField}</if>
+            <if test="createtime != null "> and createtime = #{createtime}</if>
+            <if test="updatetime != null "> and updatetime = #{updatetime}</if>
+        </where>
+    </select>
+    
+    <select id="selectVemRepairRecordsByRecordId" parameterType="Long" resultMap="VemRepairRecordsResult">
+        <include refid="selectVemRepairRecordsVo"/>
+        where record_id = #{recordId}
+    </select>
+
+    <insert id="insertVemRepairRecords" parameterType="VemRepairRecords">
+        insert into vem_repair_records
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">record_id,</if>
+            <if test="vemId != null">vem_id,</if>
+            <if test="vemLocation != null">vem_location,</if>
+            <if test="Repairers != null">Repairers,</if>
+            <if test="repairIssues != null">Repair_issues,</if>
+            <if test="repairCompelete != null">Repair_compelete,</if>
+            <if test="extendField != null">extendField,</if>
+            <if test="createtime != null">createtime,</if>
+            <if test="updatetime != null">updatetime,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="recordId != null">#{recordId},</if>
+            <if test="vemId != null">#{vemId},</if>
+            <if test="vemLocation != null">#{vemLocation},</if>
+            <if test="Repairers != null">#{Repairers},</if>
+            <if test="repairIssues != null">#{repairIssues},</if>
+            <if test="repairCompelete != null">#{repairCompelete},</if>
+            <if test="extendField != null">#{extendField},</if>
+            <if test="createtime != null">#{createtime},</if>
+            <if test="updatetime != null">#{updatetime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVemRepairRecords" parameterType="VemRepairRecords">
+        update vem_repair_records
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vemId != null">vem_id = #{vemId},</if>
+            <if test="vemLocation != null">vem_location = #{vemLocation},</if>
+            <if test="Repairers != null">Repairers = #{Repairers},</if>
+            <if test="repairIssues != null">Repair_issues = #{repairIssues},</if>
+            <if test="repairCompelete != null">Repair_compelete = #{repairCompelete},</if>
+            <if test="extendField != null">extendField = #{extendField},</if>
+            <if test="createtime != null">createtime = #{createtime},</if>
+            <if test="updatetime != null">updatetime = #{updatetime},</if>
+        </trim>
+        where record_id = #{recordId}
+    </update>
+
+    <delete id="deleteVemRepairRecordsByRecordId" parameterType="Long">
+        delete from vem_repair_records where record_id = #{recordId}
+    </delete>
+
+    <delete id="deleteVemRepairRecordsByRecordIds" parameterType="String">
+        delete from vem_repair_records where record_id in 
+        <foreach item="recordId" collection="array" open="(" separator="," close=")">
+            #{recordId}
+        </foreach>
+    </delete>
+</mapper>

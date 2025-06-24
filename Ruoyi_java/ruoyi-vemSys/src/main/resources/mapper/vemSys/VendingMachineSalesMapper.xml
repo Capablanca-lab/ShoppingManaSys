@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ruoyi.vemSys.mapper.VendingMachineSalesMapper">
+    
+    <resultMap type="VendingMachineSales" id="VendingMachineSalesResult">
+        <result property="id"    column="id"    />
+        <result property="vemId"    column="vem_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="productName"    column="product_name"    />
+        <result property="soldQuantity"    column="sold_quantity"    />
+        <result property="remainingQuantity"    column="remaining_quantity"    />
+        <result property="totalProfit"    column="total_profit"    />
+        <result property="isSoldOut"    column="is_sold_out"    />
+        <result property="extendInfo"    column="extend_info"    />
+        <result property="createdTime"    column="created_time"    />
+        <result property="updatedTime"    column="updated_time"    />
+    </resultMap>
+
+    <sql id="selectVendingMachineSalesVo">
+        select id, vem_id, product_id, product_name, sold_quantity, remaining_quantity, total_profit, is_sold_out, extend_info, created_time, updated_time from vending_machine_sales
+    </sql>
+
+    <select id="selectVendingMachineSalesList" parameterType="VendingMachineSales" resultMap="VendingMachineSalesResult">
+        <include refid="selectVendingMachineSalesVo"/>
+        <where>  
+            <if test="id != null "> and id = #{id}</if>
+            <if test="vemId != null "> and vem_id = #{vemId}</if>
+            <if test="productName != null  and productName != ''"> and product_name = #{productName}</if>
+            <if test="soldQuantity != null "> and sold_quantity = #{soldQuantity}</if>
+            <if test="remainingQuantity != null "> and remaining_quantity = #{remainingQuantity}</if>
+            <if test="totalProfit != null "> and total_profit = #{totalProfit}</if>
+            <if test="isSoldOut != null "> and is_sold_out = #{isSoldOut}</if>
+            <if test="extendInfo != null  and extendInfo != ''"> and extend_info like concat('%', #{extendInfo}, '%')</if>
+            <if test="createdTime != null "> and created_time = #{createdTime}</if>
+            <if test="updatedTime != null "> and updated_time = #{updatedTime}</if>
+        </where>
+    </select>
+    
+    <select id="selectVendingMachineSalesById" parameterType="Long" resultMap="VendingMachineSalesResult">
+        <include refid="selectVendingMachineSalesVo"/>
+        where id = #{id}
+    </select>
+
+    <insert id="insertVendingMachineSales" parameterType="VendingMachineSales" useGeneratedKeys="true" keyProperty="id">
+        insert into vending_machine_sales
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="vemId != null">vem_id,</if>
+            <if test="productId != null">product_id,</if>
+            <if test="productName != null and productName != ''">product_name,</if>
+            <if test="soldQuantity != null">sold_quantity,</if>
+            <if test="remainingQuantity != null">remaining_quantity,</if>
+            <if test="totalProfit != null">total_profit,</if>
+            <if test="isSoldOut != null">is_sold_out,</if>
+            <if test="extendInfo != null">extend_info,</if>
+            <if test="createdTime != null">created_time,</if>
+            <if test="updatedTime != null">updated_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="vemId != null">#{vemId},</if>
+            <if test="productId != null">#{productId},</if>
+            <if test="productName != null and productName != ''">#{productName},</if>
+            <if test="soldQuantity != null">#{soldQuantity},</if>
+            <if test="remainingQuantity != null">#{remainingQuantity},</if>
+            <if test="totalProfit != null">#{totalProfit},</if>
+            <if test="isSoldOut != null">#{isSoldOut},</if>
+            <if test="extendInfo != null">#{extendInfo},</if>
+            <if test="createdTime != null">#{createdTime},</if>
+            <if test="updatedTime != null">#{updatedTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateVendingMachineSales" parameterType="VendingMachineSales">
+        update vending_machine_sales
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="vemId != null">vem_id = #{vemId},</if>
+            <if test="productId != null">product_id = #{productId},</if>
+            <if test="productName != null and productName != ''">product_name = #{productName},</if>
+            <if test="soldQuantity != null">sold_quantity = #{soldQuantity},</if>
+            <if test="remainingQuantity != null">remaining_quantity = #{remainingQuantity},</if>
+            <if test="totalProfit != null">total_profit = #{totalProfit},</if>
+            <if test="isSoldOut != null">is_sold_out = #{isSoldOut},</if>
+            <if test="extendInfo != null">extend_info = #{extendInfo},</if>
+            <if test="createdTime != null">created_time = #{createdTime},</if>
+            <if test="updatedTime != null">updated_time = #{updatedTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteVendingMachineSalesById" parameterType="Long">
+        delete from vending_machine_sales where id = #{id}
+    </delete>
+
+    <delete id="deleteVendingMachineSalesByIds" parameterType="String">
+        delete from vending_machine_sales where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+</mapper>

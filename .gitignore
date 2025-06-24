@@ -1,0 +1,72 @@
+######################################################################
+# Build Tools
+
+.gradle
+Ruoyi_java/build/
+!Ruoyi_java/gradle/wrapper/gradle-wrapper.jar
+
+target/
+!.mvn/wrapper/maven-wrapper.jar
+
+######################################################################
+# IDE
+
+### STS ###
+.apt_generated
+.classpath
+.factorypath
+.project
+.settings
+.springBeans
+
+### IntelliJ IDEA ###
+.idea
+*.iws
+*.iml
+*.ipr
+
+.DS_Store
+Ruoyi_vue/node_modules/
+Ruoyi_vue/dist/
+Ruoyi_vue/npm-debug.log*
+Ruoyi_vue/yarn-debug.log*
+Ruoyi_vue/yarn-error.log*
+Ruoyi_vue/**/*.log
+
+Ruoyi_vue/tests/**/coverage/
+Ruoyi_vue/tests/e2e/reports
+Ruoyi_vue/selenium-debug.log
+
+# Editor directories and files
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.local
+
+Ruoyi_vue/package-lock.json
+Ruoyi_vue/yarn.lock
+
+
+### JRebel ###
+rebel.xml
+
+### NetBeans ###
+nbproject/private/
+build/*
+nbbuild/
+dist/
+nbdist/
+.nb-gradle/
+
+######################################################################
+# Others
+*.log
+*.xml.versionsBackup
+*.swp
+
+!*/build/*.java
+!*/build/*.html
+!*/build/*.xml
